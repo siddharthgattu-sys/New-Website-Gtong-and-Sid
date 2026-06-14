@@ -126,7 +126,7 @@ export function Contact() {
                   <label htmlFor="name" className="mb-1.5 block text-sm font-semibold text-ink">
                     Name
                   </label>
-                  <input id="name" name="name" type="text" autoComplete="name" className={fieldClass(errors.name)} />
+                  <input id="name" name="name" type="text" autoComplete="off" className={fieldClass(errors.name)} />
                   {errors.name && (
                     <span className="mt-1 block text-xs text-red-600">Please enter your name.</span>
                   )}
@@ -135,7 +135,7 @@ export function Contact() {
                   <label htmlFor="business" className="mb-1.5 block text-sm font-semibold text-ink">
                     Business name
                   </label>
-                  <input id="business" name="business" type="text" autoComplete="organization" className={fieldClass()} />
+                  <input id="business" name="business" type="text" autoComplete="off" className={fieldClass()} />
                 </div>
               </div>
 
@@ -144,7 +144,7 @@ export function Contact() {
                   <label htmlFor="email" className="mb-1.5 block text-sm font-semibold text-ink">
                     Email
                   </label>
-                  <input id="email" name="email" type="email" autoComplete="email" className={fieldClass(errors.email)} />
+                  <input id="email" name="email" type="email" autoComplete="off" className={fieldClass(errors.email)} />
                   {errors.email && (
                     <span className="mt-1 block text-xs text-red-600">Please enter a valid email address.</span>
                   )}
@@ -192,6 +192,7 @@ export function Contact() {
                   id="message"
                   name="message"
                   rows={4}
+                  autoComplete="off"
                   placeholder="What kind of website are you looking for? New site, redesign, etc."
                   className={fieldClass(errors.message)}
                 />
