@@ -90,7 +90,7 @@ export function Portfolio() {
   );
 
   return (
-    <section id="work" className="scroll-mt-24 bg-white">
+    <section id="work" className="scroll-mt-24 bg-page">
       <ContainerScroll
         titleComponent={
           <div className="px-4">

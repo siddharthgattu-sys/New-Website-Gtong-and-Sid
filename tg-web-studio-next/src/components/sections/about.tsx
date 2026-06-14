@@ -12,7 +12,7 @@ export function About() {
                 <div className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-brand-400 to-brand-600 font-heading text-2xl font-extrabold text-white shadow-lg sm:h-28 sm:w-28 sm:text-3xl">
                   SG
                 </div>
-                <div className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-cta-500 to-cta-600 font-heading text-2xl font-extrabold text-white shadow-lg sm:h-28 sm:w-28 sm:text-3xl">
+                <div className="flex h-24 w-24 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-cta-500 to-cta-600 font-heading text-2xl font-extrabold text-ink shadow-lg sm:h-28 sm:w-28 sm:text-3xl">
                   GT
                 </div>
               </div>

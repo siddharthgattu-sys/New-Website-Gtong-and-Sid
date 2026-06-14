@@ -8,22 +8,24 @@
   --font-heading: var(--font-archivo);
   --font-body: var(--font-space-grotesk);
 
-  --color-brand-50: #F0F9FF;
-  --color-brand-100: #E0F2FE;
-  --color-brand-200: #BAE6FD;
-  --color-brand-300: #7DD3FC;
-  --color-brand-400: #38BDF8;
-  --color-brand-500: #0EA5E9;
-  --color-brand-600: #0284C7;
+  --color-brand-50: #EEF1F8;
+  --color-brand-100: #D0D8EE;
+  --color-brand-200: #A0B0D9;
+  --color-brand-300: #7090C4;
+  --color-brand-400: #3558A4;
+  --color-brand-500: #112250;
+  --color-brand-600: #0C1840;
 
-  --color-cta-500: #F97316;
-  --color-cta-600: #EA580C;
+  --color-cta-500: #F5F0E9;
+  --color-cta-600: #E8E1D7;
 
-  --color-ink: #0C4A6E;
-  --color-ink-muted: #475569;
+  --color-ink: #112250;
+  --color-ink-muted: #3D4E70;
 
-  --color-navy-900: #07203A;
-  --color-navy-800: #0E3257;
+  --color-navy-900: #0D1428;
+  --color-navy-800: #18223C;
+
+  --color-page: #FFFFFF;
 }
 
 @theme inline {
@@ -165,7 +167,7 @@
 
 @layer components {
   .btn-cta {
-    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full px-6 py-3 text-sm font-semibold transition-all duration-200 cursor-pointer bg-cta-500 text-white shadow-lg shadow-cta-500/30 hover:bg-cta-600 hover:-translate-y-0.5 hover:shadow-xl;
+    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full px-6 py-3 text-sm font-semibold transition-all duration-200 cursor-pointer bg-cta-500 text-ink shadow-lg shadow-brand-500/25 hover:bg-cta-600 hover:-translate-y-0.5 hover:shadow-xl;
   }
   .btn-outline-light {
     @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full px-6 py-3 text-sm font-semibold transition-all duration-200 cursor-pointer border border-white/25 bg-white/[0.04] text-white hover:bg-white/10 hover:-translate-y-0.5;

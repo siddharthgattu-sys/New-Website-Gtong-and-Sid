@@ -43,7 +43,7 @@ const services: { icon: LucideIcon; title: string; description: string }[] = [
 
 export function Services() {
   return (
-    <section id="services" className="scroll-mt-24 bg-white py-20 sm:py-28">
+    <section id="services" className="scroll-mt-24 bg-page py-20 sm:py-28">
       <div className="mx-auto max-w-6xl px-6">
         <div className="mx-auto max-w-2xl text-center">
           <p className="eyebrow">What we do</p>

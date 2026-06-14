@@ -95,7 +95,7 @@ export function HeroGeometric({
     };
 
     return (
-        <div className="relative w-full flex items-center justify-center overflow-hidden bg-[#06182c] pt-32 pb-24 md:pt-44 md:pb-32">
+        <div className="relative w-full flex items-center justify-center overflow-hidden bg-[#121212] pt-32 pb-24 md:pt-44 md:pb-32">
             <div className="absolute inset-0 bg-gradient-to-br from-brand-500/[0.15] via-transparent to-cta-500/[0.10] blur-3xl" />
 
             <div className="absolute inset-0 overflow-hidden">
