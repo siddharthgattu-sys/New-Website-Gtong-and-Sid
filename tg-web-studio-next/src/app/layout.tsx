@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Archivo, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
+import { SmoothScroll } from "@/components/ui/smooth-scroll";
 
 const archivo = Archivo({
   variable: "--font-archivo",
@@ -29,8 +30,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${archivo.variable} ${spaceGrotesk.variable} h-full`}>
       <body className="min-h-full flex flex-col font-body antialiased text-ink-muted bg-page">
-        <ScrollToTop />
-        {children}
+        <SmoothScroll>
+          <ScrollToTop />
+          {children}
+        </SmoothScroll>
       </body>
     </html>
   );
