@@ -19,9 +19,9 @@ export default function Home() {
         <ValueStrip />
         <About />
         <Serve />
+        <Portfolio />
         <Services />
         <Process />
-        <Portfolio />
         <Faq />
         <Contact />
       </main>

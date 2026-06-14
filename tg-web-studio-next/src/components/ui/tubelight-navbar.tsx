@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -19,6 +19,8 @@ interface NavBarProps {
 export function NavBar({ items, className }: NavBarProps) {
   const [activeTab, setActiveTab] = useState(items[0].name)
   const [isMobile, setIsMobile] = useState(false)
+  const isNavigating = useRef(false)
+  const navTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     const handleResize = () => {
@@ -29,6 +31,37 @@ export function NavBar({ items, className }: NavBarProps) {
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
   }, [])
+
+  useEffect(() => {
+    const sections = items
+      .map(item => document.querySelector(item.url))
+      .filter((el): el is Element => el !== null)
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (isNavigating.current) return
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const item = items.find(i => i.url === `#${entry.target.id}`)
+            if (item) setActiveTab(item.name)
+          }
+        })
+      },
+      { rootMargin: "-50% 0px -50% 0px", threshold: 0 }
+    )
+
+    sections.forEach(el => observer.observe(el))
+    return () => observer.disconnect()
+  }, [items])
+
+  function handleTabClick(name: string) {
+    setActiveTab(name)
+    isNavigating.current = true
+    if (navTimeout.current) clearTimeout(navTimeout.current)
+    navTimeout.current = setTimeout(() => {
+      isNavigating.current = false
+    }, 1000)
+  }
 
   return (
     <div
@@ -46,7 +79,7 @@ export function NavBar({ items, className }: NavBarProps) {
             <a
               key={item.name}
               href={item.url}
-              onClick={() => setActiveTab(item.name)}
+              onClick={() => handleTabClick(item.name)}
               className={cn(
                 "relative cursor-pointer text-sm font-semibold px-6 py-2 rounded-full transition-colors",
                 "text-ink-muted hover:text-brand-600",
