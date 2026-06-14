@@ -42,9 +42,7 @@
     <!-- ================= HERO ================= -->
     <section class="hero">
       <div class="hero__bg" aria-hidden="true">
-        <div class="blob blob--a"></div>
-        <div class="blob blob--b"></div>
-        <div class="grid-overlay"></div>
+        <svg id="waveSvg" xmlns="http://www.w3.org/2000/svg" style="position:absolute;inset:0;width:100%;height:100%;display:block;"></svg>
       </div>
 
       <div class="container hero__inner">
@@ -653,5 +651,127 @@
   </footer>
 
   <script src="js/main.js"></script>
+  <script type="module">
+    import { createNoise2D } from 'https://cdn.jsdelivr.net/npm/simplex-noise@4/dist/esm/simplex-noise.js';
+
+    const hero = document.querySelector('.hero');
+    const svg  = document.getElementById('waveSvg');
+    if (!hero || !svg) throw new Error('Wave: missing elements');
+
+    const STROKE = 'rgba(14, 165, 233, 0.18)';
+    const noise2D = createNoise2D();
+
+    const mouse = { x: -10, y: 0, lx: 0, ly: 0, sx: 0, sy: 0, v: 0, vs: 0, a: 0, set: false };
+    let paths = [], lines = [], bounding = null;
+
+    function setSize() {
+      bounding = hero.getBoundingClientRect();
+      svg.setAttribute('width',   bounding.width);
+      svg.setAttribute('height',  bounding.height);
+      svg.setAttribute('viewBox', `0 0 ${bounding.width} ${bounding.height}`);
+    }
+
+    function setLines() {
+      paths.forEach(p => p.remove());
+      paths = []; lines = [];
+      const { width, height } = bounding;
+      const xGap = 8, yGap = 8;
+      const totalLines  = Math.ceil((width  + 200) / xGap);
+      const totalPoints = Math.ceil((height +  30) / yGap);
+      const xStart = (width  - xGap * totalLines)  / 2;
+      const yStart = (height - yGap * totalPoints) / 2;
+
+      for (let i = 0; i < totalLines; i++) {
+        const pts = [];
+        for (let j = 0; j < totalPoints; j++) {
+          pts.push({ x: xStart + xGap * i, y: yStart + yGap * j,
+                     wave: { x: 0, y: 0 }, cursor: { x: 0, y: 0, vx: 0, vy: 0 } });
+        }
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', STROKE);
+        path.setAttribute('stroke-width', '1');
+        svg.appendChild(path);
+        paths.push(path);
+        lines.push(pts);
+      }
+    }
+
+    function updateMouse(x, y) {
+      if (!bounding) return;
+      mouse.x = x - bounding.left;
+      mouse.y = y - bounding.top + window.scrollY;
+      if (!mouse.set) {
+        mouse.sx = mouse.x; mouse.sy = mouse.y;
+        mouse.lx = mouse.x; mouse.ly = mouse.y;
+        mouse.set = true;
+      }
+    }
+
+    function movePoints(time) {
+      lines.forEach(pts => pts.forEach(p => {
+        const move = noise2D((p.x + time * 0.008) * 0.003, (p.y + time * 0.003) * 0.002) * 8;
+        p.wave.x = Math.cos(move) * 12;
+        p.wave.y = Math.sin(move) * 6;
+
+        const dx = p.x - mouse.sx, dy = p.y - mouse.sy;
+        const d  = Math.hypot(dx, dy);
+        const l  = Math.max(175, mouse.vs);
+        if (d < l) {
+          const s = 1 - d / l;
+          const f = Math.cos(d * 0.001) * s;
+          p.cursor.vx += Math.cos(mouse.a) * f * l * mouse.vs * 0.00035;
+          p.cursor.vy += Math.sin(mouse.a) * f * l * mouse.vs * 0.00035;
+        }
+        p.cursor.vx += (0 - p.cursor.x) * 0.01;
+        p.cursor.vy += (0 - p.cursor.y) * 0.01;
+        p.cursor.vx *= 0.95; p.cursor.vy *= 0.95;
+        p.cursor.x  += p.cursor.vx; p.cursor.y += p.cursor.vy;
+        p.cursor.x   = Math.min(50, Math.max(-50, p.cursor.x));
+        p.cursor.y   = Math.min(50, Math.max(-50, p.cursor.y));
+      }));
+    }
+
+    function moved(p, cur = true) {
+      return { x: p.x + p.wave.x + (cur ? p.cursor.x : 0),
+               y: p.y + p.wave.y + (cur ? p.cursor.y : 0) };
+    }
+
+    function drawLines() {
+      lines.forEach((pts, i) => {
+        if (pts.length < 2 || !paths[i]) return;
+        const f = moved(pts[0], false);
+        let d = `M ${f.x} ${f.y}`;
+        for (let j = 1; j < pts.length; j++) {
+          const { x, y } = moved(pts[j]);
+          d += ` L ${x} ${y}`;
+        }
+        paths[i].setAttribute('d', d);
+      });
+    }
+
+    function tick(time) {
+      mouse.sx += (mouse.x - mouse.sx) * 0.1;
+      mouse.sy += (mouse.y - mouse.sy) * 0.1;
+      const dx = mouse.x - mouse.lx, dy = mouse.y - mouse.ly;
+      mouse.v   = Math.hypot(dx, dy);
+      mouse.vs += (mouse.v - mouse.vs) * 0.1;
+      mouse.vs  = Math.min(100, mouse.vs);
+      mouse.lx  = mouse.x; mouse.ly = mouse.y;
+      mouse.a   = Math.atan2(dy, dx);
+      movePoints(time);
+      drawLines();
+      requestAnimationFrame(tick);
+    }
+
+    setSize(); setLines();
+    window.addEventListener('resize', () => { setSize(); setLines(); });
+    window.addEventListener('mousemove', e => updateMouse(e.pageX, e.pageY));
+    hero.addEventListener('touchmove', e => {
+      e.preventDefault();
+      updateMouse(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: false });
+    requestAnimationFrame(tick);
+  </script>
 </body>
 </html>
