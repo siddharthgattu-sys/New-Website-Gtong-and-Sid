@@ -2,61 +2,76 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project
+## Repo Overview
 
-TG Web Studio — a marketing website for a two-person student web design studio (Grant Tong and Siddharth Gattu). The site is **plain HTML/CSS/JS with no build step, no framework, and no package manager**.
+TG Web Studio — marketing website for a two-person student web design studio (Grant Tong and Siddharth Gattu). The repo contains two separate sites:
 
-## Serving & Previewing
+| Directory | Stack | Status |
+|---|---|---|
+| `tg-web-studio/` | Plain HTML/CSS/JS, no build step | Legacy |
+| `tg-web-studio-next/` | Next.js 16, React 19, Tailwind v4, TypeScript | Active |
 
-The dev server and screenshot tool live in the **parent directory** (`/Users/granttong/WEB/`), not in this repo:
+Collaborators: `granito12` (Grant) and `siddharthgattu-sys` (Siddharth). Always `git fetch` before committing — both push to `main`.
+
+---
+
+## Next.js Site (`tg-web-studio-next/`)
+
+### Commands
+
+All commands run from inside `tg-web-studio-next/`:
 
 ```bash
-# Start server (serves WEB/ as root at http://localhost:3000)
-node /Users/granttong/WEB/serve.mjs
-
-# Site URL (not the root — it's in a subdirectory)
-http://localhost:3000/Websites-Claude-Code/tg-web-studio/index.html
-
-# Screenshot
-node /Users/granttong/WEB/screenshot.mjs http://localhost:3000/Websites-Claude-Code/tg-web-studio/index.html
+npm run dev      # Dev server — starts on :3001 if :3000 is taken
+npm run build    # Production build
+npm run lint     # ESLint
 ```
 
-Check `lsof -i :3000` before starting the server — it's often already running.
+Port 3000 is typically occupied by the static file server in the parent `/WEB/` directory.
 
-## Architecture
+### Architecture
 
-All code lives in `tg-web-studio/` across three files:
+`src/app/page.tsx` assembles all section components in order. **The page section order must match the navbar tab order** — currently: Portfolio (Work) → Services → Process → FAQ → Contact. Non-tabbed sections (ValueStrip, About, Serve) sit above these.
 
-| File | Role |
-|------|------|
-| `index.html` | All markup. Sections are self-contained and commented (`NAVBAR`, `HERO`, `VALUE STRIP`, etc.) |
-| `css/style.css` | All styles. Opens with CSS custom properties (design tokens), then component blocks in the same order as the HTML |
-| `js/main.js` | Single `DOMContentLoaded` listener. Handles: footer year, mobile nav, scroll reveal (IntersectionObserver), FAQ accordion, portfolio filter, form validation/submission |
+**`src/components/sections/`** — one server component per page section. Hero is the exception — it delegates to `HeroGeometric` which is `"use client"` due to Framer Motion and the MeshGradient shader.
 
-There is also a `<script type="module">` block at the bottom of `index.html` that runs the hero wave animation (imports `simplex-noise` from jsDelivr CDN).
+**`src/components/ui/`** — reusable primitives:
+- `tubelight-navbar.tsx` — floating pill navbar with Framer Motion `layoutId` spring animation, IntersectionObserver scroll spy, and a 1-second navigation lock on click to prevent tab flicker when smooth-scrolling past intermediate sections
+- `shape-landing-hero.tsx` — full-bleed dark hero using `@paper-design/shaders-react` `MeshGradient`
+- `container-scroll-animation.tsx` — scroll-driven 3D tilt animation using Framer Motion
 
-## Design Tokens
+### Design Tokens
 
-All brand values live in `:root` in `style.css`. Never hardcode colors — use variables:
+Tailwind v4 — tokens are defined in the `@theme {}` block in `src/app/globals.css`, **not** in a `tailwind.config.js`. Never hardcode colors.
 
-- `--color-primary: #0EA5E9` / `--color-primary-dark: #0284C7`
-- `--color-cta: #F97316` / `--color-cta-dark: #EA580C`
-- `--color-dark-bg: #07203A` (used by `.serve`, `.contact`, `.footer`)
-- `--font-heading: "Archivo"` / `--font-body: "Space Grotesk"`
-- `--radius-pill: 999px` (buttons), `--radius-lg: 24px` (cards)
+Key tokens:
+- Brand: `brand-500` (#112250 navy), `brand-400` (#3558A4), `brand-300` (#7090C4)
+- CTA: `cta-500` (#F5F0E9 swan wing cream), `cta-600` (#E8E1D7)
+- Text: `ink` (#112250), `ink-muted` (#3D4E70)
+- Dark backgrounds: `navy-900` (#0D1428), `navy-800` (#18223C)
+- Fonts: `--font-heading` (Archivo), `--font-body` (Space Grotesk)
 
-## Key Patterns
+### Utility Classes (defined in `globals.css`)
 
-**Scroll reveal:** Elements with `.reveal` start at `opacity: 0; transform: translateY(24px)` and gain `.is-visible` via IntersectionObserver. In Puppeteer screenshots these sections appear blank — that's expected; they work fine in a real browser.
+- `btn-cta` — primary CTA button (cream fill, navy text, pill shape)
+- `btn-outline-light` — ghost button for dark backgrounds
+- `btn-outline` — ghost button for light backgrounds
+- `eyebrow` / `eyebrow-light` — small all-caps section labels
 
-**Hero wave background:** Interactive SVG animation in `index.html` (`#waveSvg`). Uses `simplex-noise@4` from CDN via ESM import. Responds to `mousemove` and `touchmove` on the hero element. On resize, `setSize()` + `setLines()` rebuild the grid.
+### Key Patterns
 
-**Porting React components:** When given a React/TypeScript/Tailwind component prompt, always port it to vanilla JS + CSS. Use `<script type="module">` for ESM CDN imports when an npm package is needed.
+**Adding a new nav tab:** Add the section component with a matching `id` to `page.tsx`, add the nav item to the `navItems` array in `site-header.tsx`. The `id` must exactly match the `url` hash (e.g. `id="work"` ↔ `url: "#work"`).
 
-**Dark sections** (`.serve`, `.contact`, `.footer`) use `--color-dark-bg` and have their own light text/border token variants (`--color-dark-text`, `--color-dark-border`, etc.).
+**Section scroll targeting:** All tabbed sections use `scroll-mt-24` to offset for the fixed navbar. Non-tabbed sections don't need this.
 
-## Repo Notes
+**`overscroll-behavior: none`** is set on `html` in `globals.css` to reduce macOS rubber-band bounce (partially effective in Chrome — the compositor handles some of it before CSS applies).
 
-- Shared repo: collaborators are `granito12` (Grant) and `siddharthgattu-sys` (Siddharth). Always `git fetch` before committing to check for upstream changes.
-- Remote: `git@github.com:siddharthgattu-sys/Websites-Claude-Code`
-- The file `CLAUDE (2).md` in the repo root is a copy of the global frontend design rules — it is not repo-specific and can be ignored.
+**Hero background:** `MeshGradient` from `@paper-design/shaders-react` — monochrome black/white palette. Colors are set inline in `shape-landing-hero.tsx`.
+
+---
+
+## HTML Site (`tg-web-studio/`)
+
+Three files: `index.html` (all markup), `css/style.css` (tokens + component styles), `js/main.js` (nav, scroll reveal, FAQ accordion, portfolio filter, form submit). A `<script type="module">` at the bottom of `index.html` runs the hero wave animation via `simplex-noise@4` from CDN.
+
+Serve via the parent directory's static server: `node /Users/granttong/WEB/serve.mjs` → `http://localhost:3000/Websites-Claude-Code/tg-web-studio/index.html`
