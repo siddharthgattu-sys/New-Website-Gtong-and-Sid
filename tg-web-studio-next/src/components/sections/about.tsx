@@ -28,7 +28,7 @@ export function About() {
           <p className="mt-6 text-base leading-relaxed text-ink-muted sm:text-lg">
             We&apos;re Siddharth Gattu and Grant Tong — student web designers who got tired of
             seeing great local businesses stuck with outdated, slow, hard-to-use websites. We
-            started TG Web Studio to give restaurants, contractors, dentists, real estate agents,
+            started SiteSpark to give restaurants, contractors, dentists, real estate agents,
             startups, and small businesses the kind of modern, fast, conversion-focused website
             that bigger companies pay thousands for, at a price that actually makes sense for a
             growing business.

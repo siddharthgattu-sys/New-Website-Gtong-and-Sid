@@ -6,11 +6,8 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-6">
         <div className="grid grid-cols-1 gap-10 border-b border-white/10 pb-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <a href="#top" className="flex items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-400 to-brand-600 font-heading text-xs font-bold text-white">
-                TG
-              </span>
-              <span className="font-heading text-base font-bold text-white">Web Studio</span>
+            <a href="#top">
+              <img src="/logo-sitespark.png" alt="SiteSpark" className="h-8 w-auto" />
             </a>
             <p className="mt-4 text-sm leading-relaxed">
               Modern, fast, conversion-focused websites for growing businesses.
@@ -46,7 +43,7 @@ export function Footer() {
         </div>
 
         <p className="pt-6 text-center text-xs text-brand-100/50">
-          &copy; {year} TG Web Studio. All rights reserved.
+          &copy; {year} SiteSpark. All rights reserved.
         </p>
       </div>
     </footer>

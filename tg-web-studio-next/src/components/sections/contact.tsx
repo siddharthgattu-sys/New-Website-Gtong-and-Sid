@@ -111,7 +111,7 @@ export function Contact() {
                 </p>
               )}
 
-              <input type="hidden" name="_subject" value="New inquiry from TG Web Studio website" />
+              <input type="hidden" name="_subject" value="New inquiry from SiteSpark website" />
               <input
                 type="text"
                 name="_gotcha"

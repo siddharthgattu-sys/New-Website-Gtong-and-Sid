@@ -2,6 +2,7 @@
 
 import { Briefcase, Wrench, ListChecks, HelpCircle, Mail } from "lucide-react";
 import { NavBar } from "@/components/ui/tubelight-navbar";
+import { useEffect, useState } from "react";
 
 const navItems = [
   { name: "Work", url: "#work", icon: Briefcase },
@@ -12,19 +13,25 @@ const navItems = [
 ];
 
 export function SiteHeader() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 80);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-4 py-4 sm:px-6">
-        <a
-          href="#top"
-          className="flex items-center gap-2 rounded-full border border-brand-200 bg-white/80 px-3 py-1.5 shadow-sm backdrop-blur-lg"
-        >
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-brand-400 to-brand-600 font-heading text-xs font-bold text-white">
-            TG
-          </span>
-          <span className="font-heading text-sm font-bold text-ink sm:text-base">
-            Web Studio
-          </span>
+        <a href="#top" className="flex items-center">
+          <img
+            src="/logo-sitespark.png"
+            alt="SiteSpark"
+            className="h-7 w-auto transition-[filter] duration-300 sm:h-8"
+            style={{ filter: scrolled ? "brightness(0)" : "none" }}
+          />
         </a>
 
         <a href="#contact" className="btn-cta !px-4 !py-2 text-xs sm:!px-5 sm:!py-2.5 sm:text-sm">

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo, Space_Grotesk } from "next/font/google";
+import { Archivo, Space_Grotesk, Nunito } from "next/font/google";
 import "./globals.css";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 
@@ -15,10 +15,16 @@ const spaceGrotesk = Space_Grotesk({
   weight: ["400", "500", "600", "700"],
 });
 
+const nunito = Nunito({
+  variable: "--font-nunito",
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+});
+
 export const metadata: Metadata = {
-  title: "TG Web Studio — Websites That Grow Your Business",
+  title: "SiteSpark — Websites That Grow Your Business",
   description:
-    "TG Web Studio designs fast, modern, conversion-focused websites for restaurants, contractors, dentists, real estate agents, startups, and small businesses.",
+    "SiteSpark designs fast, modern, conversion-focused websites for restaurants, contractors, dentists, real estate agents, startups, and small businesses.",
 };
 
 export default function RootLayout({
@@ -27,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${archivo.variable} ${spaceGrotesk.variable} h-full`}>
+    <html lang="en" className={`${archivo.variable} ${spaceGrotesk.variable} ${nunito.variable} h-full`}>
       <body className="min-h-full flex flex-col font-body antialiased text-ink-muted bg-page">
         <ScrollToTop />
         {children}

@@ -87,7 +87,7 @@ export function HeroGeometric({
                         animate="visible"
                     >
                         <p className="text-base sm:text-lg md:text-xl text-white/50 mb-10 leading-relaxed font-light tracking-wide max-w-xl mx-auto px-4">
-                            TG Web Studio designs fast, modern, conversion-focused websites for
+                            SiteSpark designs fast, modern, conversion-focused websites for
                             restaurants, contractors, dentists, real estate agents, startups, and
                             small businesses ready to look as good online as they do in person.
                         </p>
