@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body { margin: 0; background: #0D1428; font-family: system-ui, sans-serif; padding: 48px; display: flex; flex-direction: column; gap: 56px; }
+  .row { display: flex; align-items: center; gap: 48px; }
+  .card { display: flex; flex-direction: column; gap: 24px; }
+  .label { color: #7090C4; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo span { font-size: 15px; font-weight: 700; color: white; letter-spacing: -0.01em; }
+  .logo-lg { display: flex; align-items: center; gap: 14px; }
+  .logo-lg span { font-size: 26px; font-weight: 700; color: white; letter-spacing: -0.02em; }
+  .on-light { background: #F5F0E9; padding: 14px 20px; border-radius: 10px; display: flex; align-items: center; gap: 10px; }
+  .on-light span { font-size: 15px; font-weight: 700; color: #112250; letter-spacing: -0.01em; }
+  .divider { width: 1px; height: 160px; background: #3558A4; opacity: 0.3; }
+</style>
+</head>
+<body>
+
+  <div class="row">
+
+    <!-- OPTION A: 4-pointed spark burst -->
+    <div class="card">
+      <div class="label">Option A — Spark burst</div>
+
+      <div class="logo">
+        <svg viewBox="0 0 20 20" fill="none" width="24" height="24">
+          <!-- 4-pointed star: longer vertical axis -->
+          <polygon points="10,0 11.8,8.2 20,10 11.8,11.8 10,20 8.2,11.8 0,10 8.2,8.2"
+            fill="#22D3EE"/>
+        </svg>
+        <span>SiteSpark</span>
+      </div>
+
+      <div class="logo-lg">
+        <svg viewBox="0 0 20 20" fill="none" width="40" height="40">
+          <polygon points="10,0 11.8,8.2 20,10 11.8,11.8 10,20 8.2,11.8 0,10 8.2,8.2"
+            fill="#22D3EE"/>
+        </svg>
+        <span>SiteSpark</span>
+      </div>
+
+      <div class="on-light">
+        <svg viewBox="0 0 20 20" fill="none" width="22" height="22">
+          <polygon points="10,0 11.8,8.2 20,10 11.8,11.8 10,20 8.2,11.8 0,10 8.2,8.2"
+            fill="#22D3EE"/>
+        </svg>
+        <span>SiteSpark</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- OPTION B: Geometric lightning bolt -->
+    <div class="card">
+      <div class="label">Option B — Geometric bolt</div>
+
+      <div class="logo">
+        <svg viewBox="0 0 14 24" fill="none" width="18" height="30">
+          <polygon points="10,0 2,13 6,13 4,24 12,11 8,11"
+            fill="#22D3EE"/>
+        </svg>
+        <span>SiteSpark</span>
+      </div>
+
+      <div class="logo-lg">
+        <svg viewBox="0 0 14 24" fill="none" width="32" height="52">
+          <polygon points="10,0 2,13 6,13 4,24 12,11 8,11"
+            fill="#22D3EE"/>
+        </svg>
+        <span>SiteSpark</span>
+      </div>
+
+      <div class="on-light">
+        <svg viewBox="0 0 14 24" fill="none" width="18" height="30">
+          <polygon points="10,0 2,13 6,13 4,24 12,11 8,11"
+            fill="#22D3EE"/>
+        </svg>
+        <span>SiteSpark</span>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

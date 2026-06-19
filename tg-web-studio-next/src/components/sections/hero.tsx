@@ -1,24 +1,40 @@
-import { ArrowRight } from "lucide-react";
-import { HeroGeometric } from "@/components/ui/shape-landing-hero";
+import { PixelHero } from "@/components/ui/pixel-perfect-hero";
+
+// Navy-900 brand colors passed directly so the pixel canvas
+// doesn't inherit white-mode CSS variables from document.body
+const PIXEL_COLORS = ["#3558A4", "#3558A4", "#3558A4", "#3558A4", "#F5F0E9"];
 
 export function Hero() {
   return (
-    <section id="top" className="scroll-mt-24">
-      <HeroGeometric
-        badge="Web design studio for growing businesses"
-        title1="Websites built to"
-        title2="grow your business"
-      >
-        <div className="mt-2 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <a href="#contact" className="btn-cta !px-8 !py-4 text-base">
-            Request a Quote
-            <ArrowRight className="h-4 w-4" />
-          </a>
-          <a href="#contact" className="btn-outline-light !px-8 !py-4 text-base">
-            Schedule a Discovery Call
-          </a>
-        </div>
-      </HeroGeometric>
-    </section>
+    <div
+      id="top"
+      className="dark"
+      style={
+        {
+          "--background": "#0D1428",
+          "--foreground": "#F5F0E9",
+          "--primary": "#F5F0E9",
+          "--primary-foreground": "#0D1428",
+          "--muted-foreground": "#3558A4",
+          "--card": "#18223C",
+          "--card-foreground": "#F5F0E9",
+          "--border": "rgba(245, 240, 233, 0.15)",
+        } as React.CSSProperties
+      }
+    >
+      <PixelHero
+        word1="Your"
+        word2="Vision."
+        description="Modern, conversion-focused websites for restaurants, contractors, dentists, real estate agents, and small businesses — built to grow your brand."
+        primaryCta="Request a Quote"
+        primaryCtaMobile="Get a Quote"
+        primaryHref="#contact"
+        secondaryCta="See Our Work"
+        secondaryCtaMobile="Our Work"
+        secondaryHref="#work"
+        marqueeLabel="Built with"
+        pixelColors={PIXEL_COLORS}
+      />
+    </div>
   );
 }
