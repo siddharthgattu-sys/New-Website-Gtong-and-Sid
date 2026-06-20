@@ -1,6 +1,5 @@
 import { SiteHeader } from "@/components/sections/site-header";
 import { Hero } from "@/components/sections/hero";
-import { ValueStrip } from "@/components/sections/value-strip";
 import { About } from "@/components/sections/about";
 import { Serve } from "@/components/sections/serve";
 import { Services } from "@/components/sections/services";
@@ -16,13 +15,12 @@ export default function Home() {
       <SiteHeader />
       <main>
         <Hero />
-        <ValueStrip />
-        <About />
         <Serve />
         <Portfolio />
         <Services />
         <Process />
         <Faq />
+        <About />
         <Contact />
       </main>
       <Footer />

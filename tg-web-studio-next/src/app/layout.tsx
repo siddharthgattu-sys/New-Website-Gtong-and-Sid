@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo, Space_Grotesk, Nunito, Syncopate } from "next/font/google";
+import { Archivo, Space_Grotesk, Nunito, Syncopate, Roboto, Poppins } from "next/font/google";
 import "./globals.css";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 
@@ -27,6 +27,18 @@ const syncopate = Syncopate({
   weight: ["400", "700"],
 });
 
+const roboto = Roboto({
+  variable: "--font-roboto",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700"],
+});
+
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+});
+
 export const metadata: Metadata = {
   title: "SiteSpark — Websites That Grow Your Business",
   description:
@@ -39,7 +51,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${archivo.variable} ${spaceGrotesk.variable} ${nunito.variable} ${syncopate.variable} h-full`}>
+    <html lang="en" className={`${archivo.variable} ${spaceGrotesk.variable} ${nunito.variable} ${syncopate.variable} ${roboto.variable} ${poppins.variable} h-full`}>
       <body className="min-h-full flex flex-col font-body antialiased text-ink-muted bg-page">
         <ScrollToTop />
         {children}

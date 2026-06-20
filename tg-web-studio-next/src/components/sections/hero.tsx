@@ -1,4 +1,8 @@
+"use client";
+
+import React from "react";
 import { PixelHero } from "@/components/ui/pixel-perfect-hero";
+import { KineticText } from "@/components/ui/kinetic-text";
 
 // Navy-900 brand colors passed directly so the pixel canvas
 // doesn't inherit white-mode CSS variables from document.body
@@ -25,14 +29,23 @@ export function Hero() {
       <PixelHero
         word1="Your"
         word2="Vision."
-        description="Modern, conversion-focused websites for restaurants, contractors, dentists, real estate agents, and small businesses — built to grow your brand."
+        description={
+          <>
+            <span>Modern, conversion focused websites for small businesses to</span>
+            <KineticText
+              text="Grow your brand."
+              as="span"
+              className="text-white text-2xl sm:text-3xl md:text-4xl tracking-tight justify-center"
+            />
+          </>
+        }
         primaryCta="Request a Quote"
         primaryCtaMobile="Get a Quote"
         primaryHref="#contact"
         secondaryCta="See Our Work"
         secondaryCtaMobile="Our Work"
         secondaryHref="#work"
-        marqueeLabel="Built with"
+        marqueeLabel="Why Us"
         pixelColors={PIXEL_COLORS}
       />
     </div>

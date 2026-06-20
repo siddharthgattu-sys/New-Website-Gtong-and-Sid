@@ -6,7 +6,8 @@
 
 @theme {
   --font-heading: var(--font-archivo);
-  --font-body: var(--font-space-grotesk);
+  --font-body: var(--font-poppins);
+  --font-stack-headline: var(--font-poppins);
 
   --color-brand-50: #EEF1F8;
   --color-brand-100: #D0D8EE;
@@ -149,7 +150,7 @@
     @apply bg-background text-foreground;
   }
   html {
-    @apply font-body scroll-smooth;
+    @apply font-body;
     overscroll-behavior: none;
   }
   h1, h2, h3, h4 {

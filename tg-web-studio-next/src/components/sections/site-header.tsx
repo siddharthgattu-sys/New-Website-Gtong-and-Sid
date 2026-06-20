@@ -5,6 +5,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { MenuToggleIcon } from "@/components/ui/menu-toggle-icon";
 import { useScroll } from "@/components/ui/use-scroll";
+import { scrollToHash } from "@/lib/scroll";
 
 const navLinks = [
   { label: "Work", href: "#work" },
@@ -48,7 +49,7 @@ export function SiteHeader() {
           )}
         >
           {/* Logo — white on hero, flips dark when scrolled */}
-          <a href="#top" className="flex items-center self-center leading-none -translate-y-1">
+          <a href="#top" onClick={(e) => { e.preventDefault(); scrollToHash("#top"); }} className="flex items-center self-center leading-none -translate-y-1 ml-2">
             <img
               src="/logo-sitespark.png"
               alt="SiteSpark"
@@ -58,7 +59,7 @@ export function SiteHeader() {
           </a>
 
           {/* Desktop nav */}
-          <div className="hidden items-center gap-2 md:flex">
+          <div className="hidden items-center gap-2 md:flex mr-2">
             {navLinks.map((link, i) => (
               <a
                 key={i}
@@ -67,6 +68,7 @@ export function SiteHeader() {
                   !scrolled && "text-white hover:text-white hover:bg-white/10",
                 )}
                 href={link.href}
+                onClick={(e) => { e.preventDefault(); scrollToHash(link.href); }}
               >
                 {link.label}
               </a>
@@ -77,6 +79,7 @@ export function SiteHeader() {
                 buttonVariants({ variant: scrolled ? "default" : "outline" }),
                 !scrolled && "border-white/60 text-white bg-transparent hover:bg-white/10 hover:text-white",
               )}
+              onClick={(e) => { e.preventDefault(); scrollToHash("#contact"); }}
             >
               Request a Quote
             </a>
@@ -118,7 +121,7 @@ export function SiteHeader() {
                   key={link.label}
                   className={buttonVariants({ variant: "ghost", className: "justify-start" })}
                   href={link.href}
-                  onClick={() => setOpen(false)}
+                  onClick={(e) => { e.preventDefault(); setOpen(false); scrollToHash(link.href); }}
                 >
                   {link.label}
                 </a>
@@ -128,7 +131,7 @@ export function SiteHeader() {
               <a
                 href="#contact"
                 className={cn(buttonVariants({ variant: "default" }), "w-full justify-center")}
-                onClick={() => setOpen(false)}
+                onClick={(e) => { e.preventDefault(); setOpen(false); scrollToHash("#contact"); }}
               >
                 Request a Quote
               </a>
