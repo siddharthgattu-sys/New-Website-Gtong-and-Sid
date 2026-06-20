@@ -273,7 +273,7 @@ export function PixelHero({
 
       {/* Description + mobile marquee */}
       <div className="flex flex-col items-center justify-center text-center my-auto md:my-0 order-2 px-1 w-full pointer-events-none">
-        <p className="text-sm sm:text-lg md:text-xl font-light text-foreground/85 max-w-[95%] sm:max-w-md md:max-w-xl px-1 leading-relaxed">
+        <p className="text-sm sm:text-lg md:text-xl font-light text-foreground max-w-[95%] sm:max-w-md md:max-w-xl px-1 leading-relaxed">
           {description}
         </p>
         <div className="block md:hidden w-full mt-14 pointer-events-auto">
