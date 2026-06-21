@@ -29,16 +29,16 @@ export function SiteHeader() {
   return (
     <div
       className={cn(
-        "fixed inset-x-0 z-50 flex justify-center px-0 md:px-4",
+        "fixed inset-x-0 z-50 flex justify-center px-0 md:px-2",
         "transition-[top] duration-300 ease-out",
         scrolled && !open ? "top-0 md:top-4" : "top-2",
       )}
     >
       <header
         className={cn(
-          "w-full max-w-7xl border-b border-transparent md:rounded-md md:border md:transition-all md:ease-out",
+          "w-full max-w-[1420px] border-b border-transparent md:rounded-md md:border md:transition-all md:ease-out",
           scrolled && !open &&
-            "bg-background/95 supports-[backdrop-filter]:bg-background/80 border-border backdrop-blur-lg md:max-w-6xl md:shadow",
+            "bg-background/95 supports-[backdrop-filter]:bg-background/80 border-border backdrop-blur-lg md:max-w-[1150px] md:shadow",
           open && "bg-background/95",
         )}
       >
