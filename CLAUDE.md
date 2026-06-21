@@ -29,57 +29,59 @@ npm run lint     # ESLint
 
 ### Architecture
 
-`src/app/page.tsx` assembles all section components in order. **The page section order must match the navbar tab order.** Current order:
+`src/app/page.tsx` assembles all section components in order. **The page section order must match the navbar link order.** Current order:
 
 ```
-Hero → ValueStrip → About → Serve → Portfolio → Services → Process → Faq → Contact
+Hero → Serve → Portfolio → Services → Process → Faq → About → Contact
 ```
 
-Tabbed sections (Portfolio, Services, Process, Faq, Contact) must have `id` attributes that match the `url` hash in the `navItems` array in `site-header.tsx`. Non-tabbed sections (ValueStrip, About, Serve) don't need nav entries.
+Linked sections (Portfolio, Services, Process, Faq, Contact) must have `id` attributes matching the `href` hash in the `navLinks` array in `site-header.tsx`. Non-linked sections (Serve, About) don't need nav entries.
 
-**`src/components/sections/`** — one component per page section. `SiteHeader` is `"use client"` because it tracks scroll position to toggle the logo's CSS filter (white on dark hero → black on light sections). `Hero` is a server component that wraps `PixelHero` in a dark-mode div (see Dark Section Pattern below).
+**`src/components/sections/`** — one component per page section:
+- `site-header.tsx` — `"use client"`. Floating header that widens to `max-w-[1420px]` at the top and shrinks to `max-w-[1150px]` floating pill when scrolled past 80px. Logo flips from white to `brightness(0)` on scroll. All nav links and CTAs call `scrollToHash` from `src/lib/scroll.ts`.
+- `hero.tsx` — `"use client"`. Wraps `PixelHero` in a `div.dark` with inline CSS variable overrides for the navy theme. Passes `description` as `React.ReactNode` (static text + `KineticText`).
+- `serve.tsx` — Compact dark strip (`bg-[#080D1A]`), 6-column grid of label-only pills, heading uses serif italic on "yours" to echo the hero.
 
 **`src/components/ui/`** — reusable primitives:
-- `tubelight-navbar.tsx` — floating pill navbar with Framer Motion `layoutId` spring animation, IntersectionObserver scroll spy, and a 1-second navigation lock on click to prevent tab flicker when smooth-scrolling past intermediate sections
-- `pixel-perfect-hero.tsx` — full-viewport hero with a canvas-based pixel ripple animation, "tahoe-glass-text" white shimmer headline, and a brand logo marquee. Accepts `pixelColors` prop to bypass DOM color computation (required when the hero is inside a dark wrapper — see below). Also accepts `primaryHref`/`secondaryHref` for scroll-to-section CTAs.
-- `container-scroll-animation.tsx` — scroll-driven 3D tilt animation using Framer Motion
-- `shape-landing-hero.tsx` — legacy full-bleed dark hero using `@paper-design/shaders-react` `MeshGradient`; no longer used for the active hero but kept in the codebase
+- `pixel-perfect-hero.tsx` — full-viewport hero with canvas pixel ripple, "tahoe-glass-text" shimmer headline, and value-prop marquee. `description` prop accepts `React.ReactNode`. Requires `pixelColors` prop when inside a dark wrapper (see Dark Section Pattern).
+- `kinetic-text.tsx` — CSS hover-driven font-weight cascade. Hovering a letter spikes it to `font-[900]`; neighbors interpolate via `has-[+span:hover]` selectors. No framer-motion.
+- `menu-toggle-icon.tsx` — animated hamburger/close SVG.
+- `use-scroll.ts` — RAF-throttled scroll hook with `{ passive: true }`. Returns `true` once `window.scrollY` exceeds a threshold.
+- `container-scroll-animation.tsx` — scroll-driven 3D tilt (Framer Motion). Legacy, still in codebase.
+- `tubelight-navbar.tsx` / `shape-landing-hero.tsx` — legacy components, unused.
+
+**`src/lib/scroll.ts`** — shared smooth-scroll utility. `smoothScrollTo(targetY)` runs a 500ms `easeInOutQuart` RAF animation. `scrollToHash(href)` resolves a hash to a DOM element (respecting `scroll-margin-top`) and calls `smoothScrollTo`. A single `activeRaf` ref cancels any in-progress animation. Import this instead of writing inline scroll logic.
 
 ### Logo
 
-The SiteSpark logo lives at `public/logo-sitespark.png` (trimmed PNG, 670×179, white mark on transparent background). It appears in both `site-header.tsx` and `footer.tsx`. In the header, `filter: brightness(0)` is applied when scrolled to make it dark on light-background sections. The footer is always dark (`bg-navy-900`) so no filter is needed there.
+`public/logo-sitespark.png` (670×179 PNG, white on transparent). Used in `site-header.tsx` and `footer.tsx`. Header applies `filter: brightness(0)` when scrolled to darken it on light sections.
 
 ### Design Tokens
 
-Tailwind v4 — tokens are defined in the `@theme {}` block in `src/app/globals.css`, **not** in a `tailwind.config.js`. Never hardcode colors.
+Tailwind v4 — tokens live in the `@theme {}` block in `src/app/globals.css`. Never hardcode colors or fonts.
 
 Key tokens:
-- Brand: `brand-500` (#112250 navy), `brand-400` (#3558A4), `brand-300` (#7090C4)
-- CTA: `cta-500` (#F5F0E9 swan wing cream), `cta-600` (#E8E1D7)
-- Text: `ink` (#112250), `ink-muted` (#3D4E70)
+- Brand: `brand-500` (#112250), `brand-400` (#3558A4), `brand-300` (#7090C4)
 - Dark backgrounds: `navy-900` (#0D1428), `navy-800` (#18223C)
-- Fonts: `--font-heading` (Archivo), `--font-body` (Space Grotesk), `--font-syncopate` (Syncopate — loaded, available for display use)
-
-### Utility Classes (defined in `globals.css`)
-
-- `btn-cta` — primary CTA button (cream fill, navy text, pill shape)
-- `btn-outline-light` — ghost button for dark backgrounds
-- `btn-outline` — ghost button for light backgrounds
-- `eyebrow` / `eyebrow-light` — small all-caps section labels
+- Text: `ink` (#112250), `ink-muted` (#3D4E70)
+- CTA: `cta-500` (#F5F0E9 cream), `cta-600` (#E8E1D7)
+- Fonts: `--font-heading` (Archivo), `--font-body` (Poppins), `--font-stack-headline` (Poppins — used for hero description), `--font-syncopate` (loaded, available)
 
 ### Key Patterns
 
-**Adding a new nav tab:** Add the section component with a matching `id` to `page.tsx`, add the nav item to the `navItems` array in `site-header.tsx`. The `id` must exactly match the `url` hash (e.g. `id="work"` ↔ `url: "#work"`).
+**Adding a nav link:** Add the section with a matching `id` to `page.tsx`, add to `navLinks` in `site-header.tsx`. Linked sections need `scroll-mt-24`.
 
-**Section scroll targeting:** All tabbed sections use `scroll-mt-24` to offset for the fixed navbar. Non-tabbed sections don't need this.
+**Smooth scroll:** Always use `scrollToHash` from `src/lib/scroll.ts`. Never use CSS `scroll-behavior: smooth` — it was removed because it conflicts with Framer Motion's `useScroll`.
 
-**`overscroll-behavior: none`** is set on `html` in `globals.css` to reduce macOS rubber-band bounce (partially effective in Chrome).
+**Dark Section Pattern:** The hero wraps `PixelHero` in `div.dark` with inline CSS variable overrides. Always pass `pixelColors` explicitly — the component's fallback color-detection reads from `document.body` which sits outside the dark wrapper.
 
-**Dark Section Pattern:** The hero is a `div.dark` with inline CSS variable overrides so `PixelHero`'s shadcn-style tokens (`bg-background`, `text-primary`, etc.) resolve to SiteSpark navy colors instead of the site's default white. Always pass `pixelColors` explicitly when using `PixelHero` inside such a wrapper — its color-detection code appends a div to `document.body`, which sits outside the dark wrapper and would pick up white-mode values otherwise.
+**Hero description:** `PixelHero` accepts `description` as `React.ReactNode`, allowing inline components like `KineticText`. `hero.tsx` must be `"use client"` because it renders client components in the description prop.
+
+**`KineticText` pointer events:** The description container in `pixel-perfect-hero.tsx` is `pointer-events-none`. The inner description div overrides with `pointer-events-auto` so hover works on `KineticText`.
 
 ### Screenshots
 
-Puppeteer is installed in `node_modules/`. The bundled Chrome for Testing has a `Page.captureScreenshot` bug on macOS ARM64 — always use system Chrome instead:
+Puppeteer is in `node_modules/`. Always use system Chrome on macOS:
 
 ```js
 puppeteer.launch({
@@ -89,12 +91,12 @@ puppeteer.launch({
 })
 ```
 
-Use `waitUntil: 'load'` (not `networkidle0`) with the Next.js dev server to avoid HMR connection timeouts.
+Use `waitUntil: 'load'` (not `networkidle0`) to avoid HMR timeouts. Screenshots save to `../temporary screenshots/` (relative to repo root) via `screenshot.mjs`.
 
 ---
 
 ## HTML Site (`tg-web-studio/`)
 
-Three files: `index.html` (all markup), `css/style.css` (tokens + component styles), `js/main.js` (nav, scroll reveal, FAQ accordion, portfolio filter, form submit). A `<script type="module">` at the bottom of `index.html` runs the hero wave animation via `simplex-noise@4` from CDN.
+Three files: `index.html`, `css/style.css`, `js/main.js`. Hero wave animation via `simplex-noise@4` from CDN.
 
-Serve via the parent directory's static server: `node /Users/granttong/WEB/serve.mjs` → `http://localhost:3000/Websites-Claude-Code/tg-web-studio/index.html`
+Serve via parent static server: `node /Users/granttong/WEB/serve.mjs` → `http://localhost:3000/Websites-Claude-Code/tg-web-studio/index.html`
